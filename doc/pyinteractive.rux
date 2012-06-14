@@ -1,0 +1,248 @@
+*pyinteractive.rux*         Simple python read-eval-print loop inside Vim
+
+           Copyright (c) 2010 clericJ <py.cleric at gmail.com>
+
+PyInteractive                           *pyinteractive*
+
+Описание                                |pyinteractive-description|
+Использование                           |pyinteractive-usage|
+Авто-дополнение кода                    |pyinteractive-autocompletion|
+Команды                                 |pyinteractive-commands|
+Настройки                               |pyinteractive-configuration|
+История версий                          |pyinteractive-changelog|
+Благодарность                           |pyinteractive-credits|
+
+==============================================================================
+
+ОПИСАНИЕ                                *pyinteractive-description*
+
+Плагин представляет собой простую реализацию read-eval-print-loop для python,
+В командном окне vim. Для работы плагина требуется чтобы vim был скомпилирован
+с поддержкой python`а (|+python|) версии не ниже 2.6 (версию можно посмотреть
+выполнив команду :py import sys; print(sys.version) ).
+
+==============================================================================
+
+ИСПОЛЬЗОВАНИЕ                           *pyinteractive-usage*
+
+Пример использования:  >
+
+    :PyInteractiveREPL
+    >>> def inc_10(x):
+    ...     return x+10
+    ...
+    >>> inc_10(7)
+    17
+    >>>  import sys
+    >>> sys.ex<tab> # авто-дополнение кода (|pyinteractive-autocompletion|)
+    <built-in function exit>
+
+    <ESC>
+
+    :PyInteractiveEval inc_10(11) +1
+    22
+    :PyInteractiveHistory
+     in[1]: def inc_10(x):
+     in[2]:     return x+10
+     in[3]:
+     in[4]: inc_10(7)
+    out[1]: 17
+     in[5]: import sys
+     in[6]: sys.exit
+    out[2]: <built-in function exit>
+     in[7]: inc_10(11) +1
+    out[3]: 22
+
+==============================================================================
+
+АВТОДОПОЛНЕНИЕ КОДА                     *pyinteractive-autocompletion*
+
+В командах |:PyInteractiveREPL| и :|PyInteractiveEval| вы можете использовать
+<tab> для автодополнения кода.
+
+==============================================================================
+
+КОМАНДЫ                                 *pyinteractive-commands*
+*:PyInteractiveREPL*
+      Открывает сеанс интерактивной консоли python в командном окне vim.
+      Для завершения работы с интерпретатором нажмите <esc>.
+      Состояние интерпретатора сохраняется между сеансами, для примера,
+      если в первый сеанс ввести x=1 то при следующем открытии
+      консоли x всё так же будет равно 1.
+
+*:PyInteractiveHistory* [options]
+      Вывод истории сессии
+      опции:
+           -r          показать историю без форматирования (raw)
+           -i          вывести только историю ввода (input only)
+           -o          вывести только историю вывода (output only)
+           -f <FILE>   записать историю в файл
+
+*:PyInteractiveEval* {code}
+      Выполнение полученного кода в интерпретаторе. Команда полезна
+      для быстрой проверки результатов, так-же например можно
+      определить её вызов в контекстном меню.
+      Пример:   >
+
+          :PyInteractiveEval def inc(x): return x+1
+          :PyInteractiveEval inc(1)
+          2
+          :PyInteractiveREPL
+          >>> inc(10)
+          11
+
+*:PyInteractiveRunBuffer*
+     Выполнение текущего буфера в интерпретаторе с выводом результатов
+
+==============================================================================
+
+МАГИЧЕСКИЕ КОМАНДЫ                      *pyinteractive-magiccommands*
+
+ - '?' Показать помощь по объекту (использует атрибут __doc__)
+>
+    >>> max?
+    max(iterable[, key=func]) -> value
+    max(a, b, c, ...[, key=func]) -> value
+    With a single iterable argument, return its largest item.
+    With two or more arguments, return the largest argument.
+<
+ - '%<' Добавить историю ввода в текущий буфер
+>
+    >>> def test(): pass
+    >>> %<
+    >>> <ESC>
+    == current buffer ==
+    def test(): pass
+<
+ - '%>' Добавить историю вывода в текущий буфер
+>
+    >>> import sys; sys.version
+    '2.7.2 (default, Jun 12 2011, 15:08:59) [MSC v.1500 32 bit (Intel)]'
+    >>> %>
+    >>> <ESC>
+    == current buffer ==
+    2.7.2 (default, Jun 12 2011, 15:08:59) [MSC v.1500 32 bit (Intel)
+<
+ - '!' Печать вывода в "красивом" виде
+>
+    >>> sys.modules!
+<
+==============================================================================
+
+НАСТРОЙКИ                               *pyinteractive-configuration*
+
+                                        *g:pyinteractive_add_menu*
+g:pyinteractive_add_menu~
+По умолчанию: 1
+
+Добавить в меню Plugin подменю PyInteractive.
+Пример:
+>
+    let g:pyinteractive_add_menu = 0
+<
+
+                                        *g:pyinteractive_add_context_menu*
+g:pyinteractive_add_context_menu~
+По умолчанию: 1
+
+Добавить в контекстное меню пункт "Evaluate" для python файлов.
+Пример:
+>
+    let g:pyinteractive_add_context_menu = 0
+<
+                                        *g:pyinteractive_add_mappings*
+g:pyinteractive_add_mappings~
+По умолчанию: 1
+
+Добавить сочетание клавиш <c-i> для вызова интерпретатора
+>
+    let g:pyinteractive_add_mappings = 0
+<
+
+==============================================================================
+
+ИСТОРИЯ ВЕРСИЙ                          *pyinteractive-changelog*
+
+    ver 0.6.2 (2012-02-22)
+    - Добавлена `магическая` команда "!" для печати вывода в красивом виде,
+      используя pprint. Пример sys.modules!
+    - Добавлена (отключаемая опциями) горячая клавиша для вызова
+      интерпретатора (<c-i>)
+    - Реорганизован код
+
+    ver 0.6.1
+    - Исправление ошибок
+
+    ver 0.6 (2011-10-23)
+    - Добавлена `магическая` команда "?" аналог команды из IPython
+    - Добавлена `магическая` команда "%<" для вывода в текущий буфер истории
+      ввода
+    - Добавлена `магическая` команда "%>" для вывода в текущий буфер истории
+      вывода
+    - В пространство имён интерпретатора внесены модули vim и sys, а так-же
+      объект _interpreter
+    - Исправлена ошибка при выводе истории
+
+    ver 0.5.4 (2011-10-13)
+    - Добавлена команда |:PyInteractiveRunBuffer|
+    - Добавлено (отключаемое опциями) меню Plugin.PyInteractive
+    - Добавлен (отключаемый опциями) пункт "Evaluate" в контекстное меню
+      для файлов python (доступен при выделении фрагмента кода)
+    - Добавлена новая опция "-o" в команде PyInteractiveHistory
+
+    ver 0.5.3 (2010-09-07)
+    - Исправлена ошибка автозавершения кода, проявляющаяся в невозможности
+      автозавершения, если перед кодом стояли отступы
+    - Добавлена поддержка vim-addon-manager
+      ( http://www.vim.org/scripts/script.php?script_id=2905 )
+    - Команда PyInteractiveOpen перееимнована в |:PyInteractiveREPL|
+
+    ver 0.5.2 (2010-09-01)
+    - Реализован авто-отступ
+    - Исправлена ошибка совместимости в линукс
+
+    ver 0.5.1 (2010-09-01)
+    - Исправлена ошибка совместимости в линукс
+    - Несколько мелких исправлений в авто-дополнении кода
+
+    ver 0.5 (2010-04-26)
+    - Добавлено авто-дополнение кода в командах |:PyInteractiveEval| и
+      :PyInteractiveOpen
+
+    ver 0.4 (2010-04-23)
+    - Расширена команда вывода истории |:PyInteractiveHistory|,
+      добавлены аргументы -r -i -f <FILE> для управления выводом
+    - Исправлены ошибки с экранированием ввода
+    - Рефакторинг кода
+    - Удалена команда :PyInteractiveRestart, для сброса состояния
+      интерпретатора перезагрузите vim
+
+    ver 0.3 (2010-04-07)
+    - Добавлена команда |:PyInteractiveHistory| для вывода истории
+      текущей сессии интерпретатора
+    - Исправлены ошибки при вводе/выводе
+
+    ver 0.2 (2010-04-04)
+    - Добавлена команда |:PyInteractiveEval|
+    - Добавлена возможность отправки выделенного фрагмента кода в
+      интерпретатор через контекстное меню PopUp.Python.Evaluate,
+      функционал реализован с помощью команды |:PyInteractiveEval|
+
+    - Команда :PyInteractiveReset переименована
+      в :PyInteractiveRestart
+
+    ver 0.1 (2010-04-02)
+    - Реализован базовый функционал через команды :PyInteractiveOpen и
+      :PyInteractiveReset
+
+==============================================================================
+
+БЛАГОДАРНОСТЬ                           *pyinteractive-credits*
+
+Тут я хочу сказать слова благодарности
+ZyX ( http://www.vim.org/account/profile.php?user_id=18939 )
+за помощь в переводе документации и правку кода, спасибо вам.
+
+==============================================================================
+ vim:tw=78:ts=8:ft=help:norl:
+

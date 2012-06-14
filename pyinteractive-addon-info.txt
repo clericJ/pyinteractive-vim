@@ -1,0 +1,12 @@
+{
+    "name": "pyinteractive",
+    "version": "0.5.2",
+    "author": "clericJ",
+    "maintainer": "clericJ",
+    "description": "Simple python read-eval-print loop inside Vim",
+    "repository": {
+        "type": "hg",
+        "url": "https://vim-pyinteractive-plugin.googlecode.com/hg/",
+    },
+}
+
