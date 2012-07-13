@@ -6,13 +6,9 @@ import sys
 import vim
 import optparse
 
-from pilib import pythonshell
-from pilib.completer import Completer
-#from ipycompleter import 
-#from ipcompleter.completer import IPCompleter as Completer
+from pyinteractiveilib import pythonshell
+from pyinteractiveilib.completer import Completer
 
-#import logging
-#LOG_FILENAME = r'D:\usr\dev\python\src\projects\interactive-vim-python\pyinteractive.log'
 #logging.basicConfig(filename=LOG_FILENAME, filemode='w',level=logging.DEBUG)
 
 
@@ -81,12 +77,21 @@ def show_history(args=''):
 
         return result
 
-    parser = optparse.OptionParser()
-    parser.add_option('-f',dest='log_filename', metavar='FILE')
-    parser.add_option('-r',dest='raw_format',action='store_true',default=False)
-    parser.add_option('-i',dest='input_only',action='store_true',default=False)
-    parser.add_option('-o',dest='output_only',action='store_true',default=False)
-    options, _ = parser.parse_args(parse_cmdline(args))
+    parser = optparse.OptionParser(usage="PyInteractiveHistory [options]")
+    parser.add_option('-f',dest='log_filename', metavar='FILE', 
+            help="write history to file")
+    parser.add_option('-r',dest='raw_format',action='store_true',default=False,
+            help="history in raw format")
+    parser.add_option('-i',dest='input_only',action='store_true',default=False,
+            help="input only")
+    parser.add_option('-o',dest='output_only',action='store_true',default=False,
+            help="output only")
+    try:
+        options, _ = parser.parse_args(parse_cmdline(args))
+
+    except SystemExit:
+        parser.print_help()
+        return
 
     if options.output_only and options.input_only:
         vim.command('echohl WarningMsg | echo "'
@@ -106,7 +111,12 @@ def show_history(args=''):
 def python_autocomplete(text, cmdline, cursorpos):
 
     completer_ = Completer(_interpreter.locals)
-    if getattr(completer_, 'all_completions'):
+
+    # NOTE: uncomment this, if you use rlcompleter 
+    #import rlcompleter
+    #completer_ = rlcompleter.Completer(_interpreter.locals)
+
+    if hasattr(completer_, 'all_completions'):
         return completer_.all_completions(text)
     else:
         completions = []

@@ -156,12 +156,12 @@ def _get_last_meaning_token_info(tokenized):
     return last
 
 
-def _exclude_privates(candidates):
-    """ _exclude_privates(candidates: iterable) -> iterable
+def _exclude_private_members(candidates):
+    """ _exclude_private_members(candidates: iterable) -> iterable
     Skip items begins  with '_'
         Usage:
             >>> attribs = ['_a', 'b', '_c', 'd_', 'e_f']
-            >>> _exclude_privates(attribs)
+            >>> _exclude_private_members(attribs)
             ['b', 'd_', 'e_f']
     """
     return filter(lambda string: string[:1] != '_', candidates)
@@ -202,8 +202,8 @@ class Completer(object):
                 # setup
                 >>> _interpreter.locals['sys'] = __import__('sys')
                 >>> _interpreter.locals['dt'] = __import__('datetime')
-                >>> sys_names = _exclude_privates(dir(_interpreter.locals['sys']))
-                >>> dt_names = _exclude_privates(dir(_interpreter.locals['dt']))
+                >>> sys_names = _exclude_private_members(dir(_interpreter.locals['sys']))
+                >>> dt_names = _exclude_private_members(dir(_interpreter.locals['dt']))
 
                 >>> _interpreter.locals['abbra_cadabra'] = None
                 >>> python_autocomplete('abbr', 'abbr', 4)
@@ -228,7 +228,6 @@ class Completer(object):
                 >>> ['dt.' + item for item in dt_names] \
                         == python_autocomplete('dt.', 'dt.', 3) #XXX
                 True
-
                 >>> python_autocomplete('help(abbr', 'help(abbr', 9)
                 ['help(abbreviations', 'help(abbra_cadabra']
 
@@ -251,7 +250,7 @@ class Completer(object):
         # >>> |...
         # >>>   |...
         if last is None:
-            return _exclude_privates(text + c for c in list(self.namespace.keys()))
+            return _exclude_private_members(text + c for c in list(self.namespace.keys()))
 
         inner = _get_inner_namespace(text)
         if last[0] == tokenize.NAME:
@@ -293,13 +292,13 @@ class Completer(object):
                     #vim.command('call confirm("debug: %s")'%_get_inner_namespace(text))
                     candidates = eval('dir({0})'.format(inner), self.namespace)
 
-                    candidates = _exclude_privates(candidates)
+                    candidates = _exclude_private_members(candidates)
                 except (NameError, SyntaxError):
                     #vim.command('call confirm("debug: syntax or name error#2\n%s")' % (text[:-1]))
                     return []
 
             else: # help(|...
-                candidates = _exclude_privates(list(self.namespace.keys()))
+                candidates = _exclude_private_members(list(self.namespace.keys()))
 
         return [text + item for item in candidates]
 

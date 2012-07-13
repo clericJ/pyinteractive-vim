@@ -12,8 +12,8 @@ except ImportError:
     pass
 
 # printable: bool
-# match: lambda x, y
-# run: lambda x, y
+# match: lambda interpreter, source
+# run: lambda interpreter, source
 ShellSSCommand = namedtuple('ShellSSCommand',
                            ('printable', 'match', 'run'))
 

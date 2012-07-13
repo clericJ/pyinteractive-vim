@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
+#from __future__ import print_function
 
 import sys
 from code import InteractiveConsole
@@ -108,9 +108,9 @@ class VimInterpreter(InteractiveConsole):
         while True:
             with vim_input_guard():
                 text = vim.eval(u'input("{0}","","customlist,'
-                        'pyinteractive#PythonAutoComplete")'.format(PROMPT))
+                        'pyinteractive#PythonAutoCompleteInput")'.format(PROMPT))
 
-            vim.command("normal g1")
+            vim.command('echo "\r"')
             if text is None:
                 break
 
@@ -126,10 +126,10 @@ class VimInterpreter(InteractiveConsole):
                 with vim_input_guard():
                     text = vim.eval(
                         u'input("{0}","{1}","customlist,'
-                                'pyinteractive#PythonAutoComplete")'.format(
+                                'pyinteractive#PythonAutoCompleteInput")'.format(
                                  MORE, autoindent(indent_level)) )
 
-                vim.command("normal g1")
+                vim.command('echo "\r"')
                 if text is None:
                     return
 
