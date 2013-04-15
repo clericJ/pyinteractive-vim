@@ -52,14 +52,7 @@ endfunction
 
 
 function! pyinteractive#EvaluateSelected(type)
-    let reg_save = @@
-
-    silent execute "normal! `<" . a:type . "`>y"
-    silent execute "startinsert!"
-    redraw!
-    execute "PyInteractiveEval " @
-
-    let @@ = reg_save
+    py _pyinteractive.evaluate(vim.current.range[0])
 endfunction
 
 if g:pyinteractive_add_menu
@@ -70,6 +63,6 @@ if g:pyinteractive_add_menu
 endif
 
 if g:pyinteractive_add_mappings
-   nmap <C-I> :PyInteractiveREPL<cr>
+   nmap <c-i> :PyInteractiveREPL<cr>
 endif
 

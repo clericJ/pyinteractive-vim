@@ -11,21 +11,35 @@ except ImportError:
     # ignore module (for doctests)
     pass
 
-# printable: bool
-# match: lambda interpreter, source
-# run: lambda interpreter, source
+
 ShellSSCommand = namedtuple('ShellSSCommand',
-                           ('printable', 'match', 'run'))
+                           ('printable',    # bool
+                            'match',        # lambda interpreter, source
+                            'run'))         # lambda interpreter, source
+
+
+class ShowDocstringCommand(object):
+
+    printable = True
+
+    def match(self, interpreter, source):
+        return (source.rstrip()[-1] == '?')
+
+    def run(self, interpreter, source):
+        result = ''
+        try:
+            result = eval('{0}.__doc__'.format(source[:-1]))
+
+        except Exception:
+            pass
+
+        return result
 
 
 SS_COMMANDS = [
     # use ? for help (max?)
-    ShellSSCommand(
-        True,
-        (lambda interpreter, source: source.rstrip()[-1] == '?'),
-        (lambda interpreter, source: eval('{0}.__doc__'.format(source[:-1]),
-            interpreter.locals))
-    ), # append input history to current buffer
+    ShowDocstringCommand(),
+    # append input history to current buffer
     ShellSSCommand(
         False,
         (lambda interpreter, source: source.strip() == '%<'),

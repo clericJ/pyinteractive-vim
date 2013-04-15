@@ -32,8 +32,11 @@ def vim_input_guard():
     """
     import vim
     vim.command('call inputsave()')
-    yield
-    vim.command('call inputrestore()')
+    try:
+        yield
+
+    finally:
+        vim.command('call inputrestore()')
 
 
 class dynamicmethod(object):

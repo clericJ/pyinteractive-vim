@@ -75,7 +75,7 @@ class VimInterpreter(InteractiveConsole):
         return result
 
 
-    def parse_ss(self, text):
+    def _parse_ss(self, text):
         """  parse_ss(text: str) -> bool
             if syntax sugar exists in code return True else False
         """
@@ -90,6 +90,8 @@ class VimInterpreter(InteractiveConsole):
 
 
     def _display_banner(self, banner):
+        ''' _display_banner(banner: str) -> None
+        '''
         if banner:
             InteractiveConsole.push(self, 'print({0})'.format(banner))
             return
@@ -108,14 +110,14 @@ class VimInterpreter(InteractiveConsole):
         while True:
             with vim_input_guard():
                 text = vim.eval(u'input("{0}","","customlist,'
-                        'pyinteractive#PythonAutoCompleteInput")'.format(PROMPT))
+                    'pyinteractive#PythonAutoCompleteInput")'.format(PROMPT))
 
             vim.command('echo "\r"')
-            if text is None:
+            if not text:
                 break
 
-            elif (text.strip() != '') and self.parse_ss(text) is True:
-               continue
+            elif (text.strip() != '') and self._parse_ss(text) is True:
+                continue
 
             # autoident
             indent = (' ' * TABSTOP)
@@ -126,14 +128,14 @@ class VimInterpreter(InteractiveConsole):
                 with vim_input_guard():
                     text = vim.eval(
                         u'input("{0}","{1}","customlist,'
-                                'pyinteractive#PythonAutoCompleteInput")'.format(
+                            'pyinteractive#PythonAutoCompleteInput")'.format(
                                  MORE, autoindent(indent_level)) )
 
                 vim.command('echo "\r"')
-                if text is None:
+                if not text:
                     return
 
-                # TODO: hardcoded condition
+                # XXX: hardcoded condition
                 if text.rstrip().endswith(':'):
                     indent_level += 1
 
@@ -146,11 +148,8 @@ class VimInterpreter(InteractiveConsole):
             source - python code (str)
         """
         ### FIXME: indent error in multiline code
-        for line in source.splitlines():
-            if(line.strip() != ''):
-                self.push(line)
 
-        self.push('\n')
+        self.push(source + '\n')
 
 
     def execute_buffer(self):

@@ -6,6 +6,7 @@ from StringIO import StringIO
 
 
 NAMESPACE_DELIMITER = '.'
+ASSIGNMENT_OPS = ['=', '+=', '-=', '*=', '/=']
 
 
 def _debug_tokeninfo(token_):
@@ -89,7 +90,6 @@ def _get_inner_namespace(text):
     """
     tokenized = _tokenize(text)
 
-    ASSIGNMENT_OPS = ['=', '+=', '-=', '*=', '/=']
     if any(filter((lambda x: x[0] == tokenize.OP and x[1] in ASSIGNMENT_OPS),
        tokenized)): tokenized = tokenized[:-1]
 
@@ -195,50 +195,53 @@ class Completer(object):
     # import StringIO
     # s=StringIO.S<tab> ERROR dir takes no keyword arguments
     # dir('s=StringIO.S') !!!
-    def all_completions(self, text):
-        """ python_autocomplete(text: str) -> list
+    def all_completions(self, text, cmdline='', cursorpos=0):
+        """ all_completions(text: str) -> list
             Uses for vim command autocompletion
             Usage:
                 # setup
+                >>> import pythonshell
+                >>> _interpreter = pythonshell.VimInterpreter()
                 >>> _interpreter.locals['sys'] = __import__('sys')
                 >>> _interpreter.locals['dt'] = __import__('datetime')
+                >>> _compl = Completer(_interpreter.locals)
                 >>> sys_names = _exclude_private_members(dir(_interpreter.locals['sys']))
                 >>> dt_names = _exclude_private_members(dir(_interpreter.locals['dt']))
 
                 >>> _interpreter.locals['abbra_cadabra'] = None
-                >>> python_autocomplete('abbr', 'abbr', 4)
+                >>> _compl.all_completions('abbr', 'abbr', 4)
                 ['abbra_cadabra']
-                >>> python_autocomplete('abbre', 'abbre', 5)
+                >>> _compl.all_completions('abbre', 'abbre', 5)
                 []
                 >>> _interpreter.locals['abbreviations'] = None
-                >>> python_autocomplete('abbr', 'abbr', 4)
+                >>> _compl.all_completions('abbr', 'abbr', 4)
                 ['abbreviations', 'abbra_cadabra']
 
-                >>> python_autocomplete('abbre', 'abbre', 5)
+                >>> _compl.all_completions('abbre', 'abbre', 5)
                 ['abbreviations']
                 >>> ['sys.' + item for item in sys_names] \
-                        == python_autocomplete('sys.', 'sys.', 4)
+                        == _compl.all_completions('sys.', 'sys.', 4)
                 True
                 >>> (['help(sys.' + item for item in sys_names] \
-                        == python_autocomplete('help(sys.', 'help(sys.', 9))
+                        == _compl.all_completions('help(sys.', 'help(sys.', 9))
                 True
-                >>> python_autocomplete('help(sys.stdou', 'help(sys.stdou', 14)
+                >>> _compl.all_completions('help(sys.stdou', 'help(sys.stdou', 14)
                 ['help(sys.stdout']
 
                 >>> ['dt.' + item for item in dt_names] \
-                        == python_autocomplete('dt.', 'dt.', 3) #XXX
+                        == _compl.all_completions('dt.', 'dt.', 3) #XXX
                 True
-                >>> python_autocomplete('help(abbr', 'help(abbr', 9)
+                >>> _compl.all_completions('help(abbr', 'help(abbr', 9)
                 ['help(abbreviations', 'help(abbra_cadabra']
 
-                >>> python_autocomplete('help(abbra', 'help(abbra', 10)
+                >>> _compl.all_completions('help(abbra', 'help(abbra', 10)
                 ['help(abbra_cadabra']
 
-                >>> python_autocomplete('help(abbr.', 'help(abbr.', 10)
+                >>> _compl.all_completions('help(abbr.', 'help(abbr.', 10)
                 []
-                >>> python_autocomplete('help( abbra', 'help( abbra', 11)
+                >>> _compl.all_completions('help( abbra', 'help( abbra', 11)
                 ['help( abbra_cadabra']
-                >>> python_autocomplete(' abbr', ' abbr', 5)
+                >>> _compl.all_completions(' abbr', ' abbr', 5)
                 [' abbreviations', ' abbra_cadabra']
         """
         #vim.command('call confirm("<%s>\n<%s>\n<%i>", %i)' % (text,cmdline,cursorpos,cursorpos))
@@ -303,3 +306,11 @@ class Completer(object):
         return [text + item for item in candidates]
 
 
+
+def _test():
+    import doctest
+    doctest.testmod()
+
+
+if(__name__ in ('__main__', '__console__')):
+    _test()

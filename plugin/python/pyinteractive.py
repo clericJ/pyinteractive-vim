@@ -90,7 +90,6 @@ def show_history(args=''):
         options, _ = parser.parse_args(parse_cmdline(args))
 
     except SystemExit:
-        parser.print_help()
         return
 
     if options.output_only and options.input_only:

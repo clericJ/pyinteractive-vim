@@ -3,5 +3,6 @@
 # TODO
    • Написать юнит-тесты
    • Записать новый скринкаст
+   • BUG: не работает print sys.<tab>
 
 vim: spell noexpandtab ft=notes
