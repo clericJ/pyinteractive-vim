@@ -249,8 +249,9 @@ ver 0.6.3 (2013-04-15)
 
 Credits                                 *pyinteractive-credits*
 
-Thanks ZyX (http://www.vim.org/account/profile.php?user_id=18939)
-for help in translation documentation and patch code.
+Thanks:
+ZyX (http://www.vim.org/account/profile.php?user_id=18939)
+filterfalse
 
 ==============================================================================
  vim:tw=78:ts=8:ft=help:norl:
