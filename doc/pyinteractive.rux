@@ -57,20 +57,20 @@ PyInteractive                           *pyinteractive*
 
 АВТОДОПОЛНЕНИЕ КОДА                     *pyinteractive-autocompletion*
 
-В командах |:PyInteractiveREPL| и :|PyInteractiveEval| вы можете использовать
+В командах |PyInteractiveREPL| и |PyInteractiveEval| вы можете использовать
 <tab> для автодополнения кода.
 
 ==============================================================================
 
 КОМАНДЫ                                 *pyinteractive-commands*
-*:PyInteractiveREPL*
+*PyInteractiveREPL*
       Открывает сеанс интерактивной консоли python в командном окне vim.
       Для завершения работы с интерпретатором нажмите <esc>.
       Состояние интерпретатора сохраняется между сеансами, для примера,
       если в первый сеанс ввести x=1 то при следующем открытии
       консоли x всё так же будет равно 1.
 
-*:PyInteractiveHistory* [options]
+*PyInteractiveHistory* [options]
       Вывод истории сессии
       опции:
            -r          показать историю без форматирования (raw)
@@ -78,10 +78,9 @@ PyInteractive                           *pyinteractive*
            -o          вывести только историю вывода (output only)
            -f <FILE>   записать историю в файл
 
-*:PyInteractiveEval* {code}
+*PyInteractiveEval* {line}
       Выполнение полученного кода в интерпретаторе. Команда полезна
-      для быстрой проверки результатов, так-же например можно
-      определить её вызов в контекстном меню.
+      для быстрой проверки результатов
       Пример:   >
 
           :PyInteractiveEval def inc(x): return x+1
@@ -90,8 +89,11 @@ PyInteractive                           *pyinteractive*
           :PyInteractiveREPL
           >>> inc(10)
           11
+<
+{range} *PyInteractiveEvalRange*
+     Выполнение диапазона из текущего буфера в интерпретаторе
 
-*:PyInteractiveRunBuffer*
+*PyInteractiveRunBuffer*
      Выполнение текущего буфера в интерпретаторе с выводом результатов
 
 ==============================================================================
@@ -163,6 +165,15 @@ g:pyinteractive_add_mappings~
 
 ИСТОРИЯ ВЕРСИЙ                          *pyinteractive-changelog*
 
+ver 0.7 (2013-07-08)
+    - Добавлена команда |PyInteractiveEvalRange|
+    - В контекстное меню добавлен пункт "Evaluate as Python code" (для выделенного текста)
+    - Исправления ошибок
+
+ver 0.6.3 (2013-04-15)
+    - Исправлены вылеты после команды PyInteractiveHistory
+    - Исправлено неожиданное закрытие vim после команды PyInteractiveHistory
+
     ver 0.6.2 (2012-02-22)
     - Добавлена `магическая` команда "!" для печати вывода в красивом виде,
       используя pprint. Пример sys.modules!
@@ -184,7 +195,7 @@ g:pyinteractive_add_mappings~
     - Исправлена ошибка при выводе истории
 
     ver 0.5.4 (2011-10-13)
-    - Добавлена команда |:PyInteractiveRunBuffer|
+    - Добавлена команда |PyInteractiveRunBuffer|
     - Добавлено (отключаемое опциями) меню Plugin.PyInteractive
     - Добавлен (отключаемый опциями) пункт "Evaluate" в контекстное меню
       для файлов python (доступен при выделении фрагмента кода)
@@ -195,7 +206,7 @@ g:pyinteractive_add_mappings~
       автозавершения, если перед кодом стояли отступы
     - Добавлена поддержка vim-addon-manager
       ( http://www.vim.org/scripts/script.php?script_id=2905 )
-    - Команда PyInteractiveOpen перееимнована в |:PyInteractiveREPL|
+    - Команда PyInteractiveOpen перееимнована в |PyInteractiveREPL|
 
     ver 0.5.2 (2010-09-01)
     - Реализован авто-отступ
@@ -206,11 +217,11 @@ g:pyinteractive_add_mappings~
     - Несколько мелких исправлений в авто-дополнении кода
 
     ver 0.5 (2010-04-26)
-    - Добавлено авто-дополнение кода в командах |:PyInteractiveEval| и
+    - Добавлено авто-дополнение кода в командах |PyInteractiveEval| и
       :PyInteractiveOpen
 
     ver 0.4 (2010-04-23)
-    - Расширена команда вывода истории |:PyInteractiveHistory|,
+    - Расширена команда вывода истории |PyInteractiveHistory|,
       добавлены аргументы -r -i -f <FILE> для управления выводом
     - Исправлены ошибки с экранированием ввода
     - Рефакторинг кода
@@ -218,15 +229,15 @@ g:pyinteractive_add_mappings~
       интерпретатора перезагрузите vim
 
     ver 0.3 (2010-04-07)
-    - Добавлена команда |:PyInteractiveHistory| для вывода истории
+    - Добавлена команда |PyInteractiveHistory| для вывода истории
       текущей сессии интерпретатора
     - Исправлены ошибки при вводе/выводе
 
     ver 0.2 (2010-04-04)
-    - Добавлена команда |:PyInteractiveEval|
+    - Добавлена команда |PyInteractiveEval|
     - Добавлена возможность отправки выделенного фрагмента кода в
       интерпретатор через контекстное меню PopUp.Python.Evaluate,
-      функционал реализован с помощью команды |:PyInteractiveEval|
+      функционал реализован с помощью команды |PyInteractiveEval|
 
     - Команда :PyInteractiveReset переименована
       в :PyInteractiveRestart
@@ -241,7 +252,7 @@ g:pyinteractive_add_mappings~
 
 Тут я хочу сказать слова благодарности
 ZyX ( http://www.vim.org/account/profile.php?user_id=18939 )
-за помощь в переводе документации и правку кода, спасибо вам.
+за помощь в переводе документации и правку кода.
 
 ==============================================================================
  vim:tw=78:ts=8:ft=help:norl:

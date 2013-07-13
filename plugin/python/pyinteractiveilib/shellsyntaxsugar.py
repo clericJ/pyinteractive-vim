@@ -14,8 +14,8 @@ except ImportError:
 
 ShellSSCommand = namedtuple('ShellSSCommand',
                            ('printable',    # bool
-                            'match',        # lambda interpreter, source
-                            'run'))         # lambda interpreter, source
+                            'match',        # lambda: interpreter, source
+                            'run'))         # lambda: interpreter, source
 
 
 class ShowDocstringCommand(object):
@@ -28,7 +28,7 @@ class ShowDocstringCommand(object):
     def run(self, interpreter, source):
         result = ''
         try:
-            result = eval('{0}.__doc__'.format(source[:-1]))
+            result = eval('{0}.__doc__'.format(source[:-1]), interpreter.locals)
 
         except Exception:
             pass

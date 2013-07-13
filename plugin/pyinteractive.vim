@@ -29,37 +29,35 @@ let s:plugin_directory=fnamemodify(expand('<sfile>'), ':p:h:h')
 python << EOF
 import sys, os, vim
 
-sys.path.append(os.path.join(vim.eval('s:plugin_directory'), os.path.normpath('plugin/python')))
+sys.path.append(os.path.join(vim.eval('s:plugin_directory'),
+                os.path.normpath('plugin/python')))
 
 import pyinteractive as _pyinteractive
 EOF
+
 command PyInteractiveREPL py _pyinteractive.run()
 command PyInteractiveRunBuffer py _pyinteractive.execute_buffer()
-command -complete=customlist,pyinteractive#PythonAutoCompleteInput -nargs=1 PyInteractiveEval exec 'py _pyinteractive.evaluate("""' . escape(<q-args>, "\"'\\"). '""")'
+command -complete=customlist,pyinteractive#PythonAutoCompleteInput -nargs=1 PyInteractiveEval exec 'py _pyinteractive.evaluate_line("""' . escape(<q-args>, "\"'\\"). '""")'
 command -complete=file -nargs=* PyInteractiveHistory exec 'py _pyinteractive.show_history("' . escape(<q-args>, "\"'\\"). '")'
+command -range PyInteractiveEvalRange <line1>, <line2> py _pyinteractive.evaluate_range()
 
-" Public Interface
 
 function! pyinteractive#PythonAutoCompleteInput(begin, cmdline, cursorpos)
     exec 'py result = []'
     exec "py result = _pyinteractive.python_autocomplete('".a:begin."','".a:cmdline."'," a:cursorpos ")"
-    "exec 'py vim.command("let candidates = split(\"%s\")" % "\n".join(result))'
     py vim.command('let candidates = %r' % result)
-    "exec 'py vim.command("call confirm(\"%s\")" % str(result))'
-    "call candidates(result)
     return candidates
 endfunction
 
-
-function! pyinteractive#EvaluateSelected(type)
-    py _pyinteractive.evaluate(vim.current.range[0])
-endfunction
 
 if g:pyinteractive_add_menu
     nmenu Plugin.PyInteractive.REPL<tab>:PyInteractiveREPL :PyInteractiveREPL<cr>
     nmenu Plugin.PyInteractive.Execute\ Buffer<tab>:PyInteractiveRunBuffer :PyInteractiveRunBuffer<cr>
     nmenu Plugin.PyInteractive.Histoty<tab>:PyInteractiveHistory :PyInteractiveHistory<cr>
     nmenu Plugin.PyInteractive.Histoty\ (Output\ only)<tab>:PyInteractiveHistory\ -o :PyInteractiveHistory -o<cr>
+
+    vmenu PopUp.-Usrsep99- :
+    vmenu PopUp.Evaluate\ as\ Python\ code :py _pyinteractive.evaluate_range()<cr>
 endif
 
 if g:pyinteractive_add_mappings

@@ -58,22 +58,22 @@ Examples:  >
 
 Autocompletion                          *pyinteractive-autocompletion*
 
-Autocompletion is defined for |:PyInteractiveEval| command and for |input()|
-opened by |:PyInteractiveREPL| command and can be accessed by pressing <tab>
+Autocompletion is defined for |PyInteractiveEval| command and for |input()|
+opened by |PyInteractiveREPL| command and can be accessed by pressing <tab>
 key (default, see 'wildchar' if you want to change this).
 
 ==============================================================================
 
 Commands                                *pyinteractive-commands*
 
-  *:PyInteractiveREPL*
+  *PyInteractiveREPL*
       Opens an interactive Python console in vim. If you want to finish
       working with the interpreter, press <esc>. Interpreter states are saved
       between PyInteractive sessions (but not between vim sessions), so that
-      if you use |:PyInteractiveREPL|, type `x=1' here, close it and then
+      if you use |PyInteractiveREPL|, type `x=1' here, close it and then
       reopen again, variable `x' will still have value `1'.
 
-  *:PyInteractiveHistory* [options]
+  *PyInteractiveHistory* [options]
       Echoes session history.
       Possible options:
            -r          Print history without any formatting (mnemonic: raw)
@@ -81,7 +81,7 @@ Commands                                *pyinteractive-commands*
            -o          Print only output history (mnemonic: output)
            -f {FILE}   Write history to file {FILE}
 
-  *:PyInteractiveEval* {code}
+  *PyInteractiveEval* {code}
       Evaluate given code in the interpreter. Command is useful for quickly
       testing results and for scripting purposes (for example, in context menu).
       Example:
@@ -93,7 +93,11 @@ Commands                                *pyinteractive-commands*
           >>> inc(10)
           11
 <
-  *:PyInteractiveRunBuffer*
+  {range} *PyInteractiveEvalRange*
+      Evaluate range
+
+
+  *PyInteractiveRunBuffer*
       Execute current buffer in python interpreter and show result.
 
 ==============================================================================
@@ -125,7 +129,7 @@ Magic commands                          *pyinteractive-magiccommands*
     == current buffer ==
     2.7.2 (default, Jun 12 2011, 15:08:59) [MSC v.1500 32 bit (Intel)]
 <
- - '!' Pretty print result 
+ - '!' Pretty print result
 >
     >>> sys.modules!
 <
@@ -166,6 +170,14 @@ Enable/Disable plugin mappings
 
 Changelog                               *pyinteractive-changelog*
 
+ver 0.7 (2013-07-08)
+        - Added |PyInteractiveEvalRange| command
+        - Added context menu item "Evaluate as Python code" (for selected text)
+        - Bugfixes
+
+ver 0.6.3 (2013-04-15)
+        - Fix PyInteractiveHistory crash
+        - Fix exit issue
 
     ver 0.6.2 (2012-02-22)
         - Added magic command "!" for pretty printing (e.g. sys.modules!)
@@ -184,7 +196,7 @@ Changelog                               *pyinteractive-changelog*
         - Fixed error in history output
 
     ver 0.5.4 (2011-10-13)
-        - Added command |:PyInteractiveRunBuffer|
+        - Added command |PyInteractiveRunBuffer|
         - Added PyInteractive menu (Plugin.PyInteractive) and context menu
           item "Evaluate" (for selected text)
         - Added option pyinteractive_add_menu
@@ -196,7 +208,7 @@ Changelog                               *pyinteractive-changelog*
         - Fixed autocompletion issue
         - Added vim-addon-manager support
           ( http://www.vim.org/scripts/script.php?script_id=2905 )
-        - Command PyInteractiveOpen renamed to |:PyInteractiveREPL|
+        - Command PyInteractiveOpen renamed to |PyInteractiveREPL|
 
     ver 0.5.2 (2010-09-01)
         - Automatic indentation
@@ -207,10 +219,10 @@ Changelog                               *pyinteractive-changelog*
         - Some bug fixes in code autocompletion
 
     ver 0.5 (2010-04-26)
-        - Added |:PyInteractiveEval| and :PyInteractiveOpen autocompletion
+        - Added |PyInteractiveEval| and :PyInteractiveOpen autocompletion
 
     ver 0.4 (2010-04-23)
-        - Improved |:PyInteractiveHistory| command: added arguments that
+        - Improved |PyInteractiveHistory| command: added arguments that
           change or redirect output
         - Fixed input escaping
         - Done some refactoring
@@ -218,19 +230,19 @@ Changelog                               *pyinteractive-changelog*
           to clear interpreter state
 
     ver 0.3 (2010-04-07)
-        - Added |:PyInteractiveHistory|
+        - Added |PyInteractiveHistory|
         - Fixed input/output errors
 
     ver 0.2 (2010-04-04)
-        - Added |:PyInteractiveEval|
+        - Added |PyInteractiveEval|
         - Added ability to evaluate selection in the interpreter through
           PopUp.Python.Evaluate item in context menu that uses
-          |:PyInteractiveEval| as a backend.
+          |PyInteractiveEval| as a backend.
         - Renamed :PyInteractiveReset with :PyInteractiveRestart
 
     ver 0.1 (2010-04-02)
-        - Initial version: introduced :PyInteractiveOpen and
-          :PyInteractiveReset commands
+        - Initial version: introduced PyInteractiveOpen and
+          PyInteractiveReset commands
 
 
 ==============================================================================

@@ -1,13 +1,18 @@
 ﻿PyInteractive changelog:
 
 
+ver 0.7 (2013-07-08)
+	- Added PyInteractiveEvalRange command
+	- Added context menu item "Evaluate as Python code" (for selected text)
+	- Bugfixes
+
 ver 0.6.3 (2013-04-15)
 	- Fix PyInteractiveHistory crash
 	- Fix exit issue
 
 ver 0.6.2 (2012-02-22)
 	- Added magic command "!" for pretty printing (e.g. sys.modules!)
-- Added mapping <c-i> (interpreter call)
+	- Added mapping <c-i> (interpreter call)
 	- Code reorganization
 
 	ver 0.6.1
@@ -70,4 +75,4 @@ ver 0.1 (2010-04-02)
 	- Initial version: introduced :PyInteractiveOpen and
 	:PyInteractiveReset commands
 
-	vim: spell
+vim: spell

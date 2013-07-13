@@ -22,11 +22,17 @@ def run():
     _interpreter.interact()
 
 
-def evaluate(source):
-    """ Evaluate python code in interpreter
-        source - python code (str)
+def evaluate_line(line):
+    """ Evaluate python code line in interpreter
+        line - python code (str)
     """
-    _interpreter.evaluate(source)
+    _interpreter.evaluate(line)
+
+
+def evaluate_range():
+    """ Evaluate current range in buffer
+    """
+    _interpreter.evaulate_range()
 
 
 def execute_buffer():
